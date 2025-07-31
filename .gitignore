@@ -26,6 +26,35 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Environment and secrets
+.env
+*.env
+.env.local
+.env.*.local
+
+# API Keys and sensitive data
+**/api_keys/
+**/secrets/
+**/*_secret*
+**/*_key*
+
+# MLflow
+mlruns/
+mlartifacts/
+mlflow.db
+.mlflow/
+
+# Results and outputs
+results/
+outputs/
+parameter_tuning/tuning_results_*.csv
+parameter_tuning/best_parameters.json
+parameter_tuning/production_rag_config.json
+
+# Large files (except sample)
+*.pdf
+!data/random_machine_learing_pdf.pdf
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.

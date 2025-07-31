@@ -1,0 +1,24 @@
+{
+  "chunk_sizes": [500, 1000, 1500],
+  "chunk_overlaps": [50, 100, 150],
+  "embedding_models": [
+    "text-embedding-3-large"
+  ],
+  "llm_models": [
+    "gpt-4o"
+  ],
+  "temperatures": [0.0, 0.1],
+  "top_k_retrieval": [3, 5, 10],
+  "experiment_settings": {
+    "max_combinations": 50,
+    "random_seed": 42,
+    "parallel_runs": 4,
+    "evaluation_timeout": 300
+  },
+  "ragas_metrics": [
+    "faithfulness",
+    "answer_relevancy",
+    "context_precision",
+    "context_recall"
+  ]
+}

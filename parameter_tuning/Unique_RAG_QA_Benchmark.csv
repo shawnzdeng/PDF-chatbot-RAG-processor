@@ -1,0 +1,101 @@
+question,ground_truth
+What is machine learning?,Machine learning is programming computers to optimize a performance criterion using example data or past experience.
+Name the components of the learning process.,"Data storage, abstraction, generalization, and evaluation."
+What are the types of learning?,"Supervised, Unsupervised, and Reinforcement learning."
+Define PAC learning.,PAC learning is a framework where the learner selects a hypothesis that with high probability has low generalization error.
+What is a version space?,The set of all hypotheses consistent with the training examples.
+Describe the goal of reinforcement learning.,To get an agent to act in a way that maximizes its rewards.
+What is the difference between classification and regression trees?,"Classification trees predict categorical outcomes, regression trees predict continuous values."
+What is entropy in decision trees?,Entropy is a measure of the amount of uncertainty or randomness in the data.
+What is the main idea behind the Naive Bayes algorithm?,It uses conditional probability to predict class labels based on evidence.
+Explain the role of the LMS algorithm.,LMS adjusts weights incrementally to minimize the squared error in predictions.
+What is abstraction in the learning process?,It involves creating general concepts about the data as a whole.
+What is generalization in ML?,Using learned knowledge to make predictions on unseen but similar data.
+Define supervised learning.,Learning from labeled data where each input has a known output.
+Define unsupervised learning.,Learning patterns from data without labeled outputs.
+What is reinforcement learning?,Learning by interacting with the environment and receiving feedback.
+What are geometric models?,"Models that define similarity using geometry like lines, planes, or distances."
+Give examples of distance-based models.,K-nearest neighbors and K-means clustering.
+What are linear models?,Models represented as a linear combination of input features.
+What are probabilistic models?,Models that represent uncertainty using probability distributions.
+What is concept learning?,Learning logical expressions or concepts from examples.
+What are logical models?,Models that use logic-based expressions like rules or trees.
+Explain the term hypothesis in ML.,A function that approximates the target function.
+What does a learning algorithm aim to optimize?,The performance of the model on a given task.
+What is information gain?,The reduction in entropy achieved by splitting on an attribute.
+What is the ID3 algorithm?,A decision tree algorithm that selects splits based on information gain.
+What are classification trees used for?,Classifying data into predefined categories.
+What are regression trees used for?,Predicting continuous numerical values.
+What is bagging?,An ensemble technique that combines predictions from multiple models trained on bootstrapped data.
+What is boosting?,An ensemble method that trains models sequentially to correct previous errors.
+What is stacking?,An ensemble technique that combines different models using a meta-learner.
+What is the EM algorithm?,An iterative method to find maximum likelihood estimates in probabilistic models.
+What is a centroid in clustering?,The mean position of all data points in a cluster.
+What is a medoid?,A data point that is most centrally located in a cluster.
+What is the KD-tree used for?,Efficient distance computations in nearest-neighbor searches.
+Define the VC dimension.,A measure of the capacity of a hypothesis space.
+What is the Candidate-Elimination algorithm?,An algorithm that maintains the version space of consistent hypotheses.
+What is the LIST-THEN-ELIMINATE algorithm?,It initializes the version space and eliminates inconsistent hypotheses.
+What is an example of generative probabilistic models?,Naive Bayes classifier.
+What are the key modules in a learning system?,"Performance system, critic, generalizer, and experiment generator."
+What is temporal difference learning?,A method to update estimates using differences between predictions.
+What is the goal of sampling theory?,To estimate properties of a population from a sample.
+What are genetic algorithms inspired by?,The process of natural selection and evolution.
+What is crossover in genetic algorithms?,A genetic operator that combines parts of two solutions.
+What is mutation in genetic algorithms?,A genetic operator that introduces random variations.
+What is a fitness function?,A function that evaluates how good a solution is.
+What is the Baldwin Effect?,The idea that learned behaviors can influence evolution.
+What is the Lamarckian evolution?,A model where acquired traits are directly inherited.
+What is a hypothesis space?,The set of all possible hypotheses for a learning task.
+What is a decision node in a decision tree?,A point where data is split based on an attribute.
+What is a leaf node in a decision tree?,A node that represents the final outcome.
+What is entropy zero?,It indicates no uncertainty in the data.
+What is overfitting in trees?,When a model captures noise instead of patterns.
+What is pruning in decision trees?,Removing branches to reduce overfitting.
+What is high bias?,A model that oversimplifies and underfits the data.
+What is high variance?,A model that is too sensitive to training data and overfits.
+How does random forest reduce overfitting?,By averaging predictions from many decision trees.
+What are kernel functions in SVM?,Functions that enable SVMs to operate in high-dimensional spaces.
+What is the main idea of support vector machines?,To find the optimal hyperplane that separates classes.
+What is logistic regression used for?,Binary classification problems.
+What is linear regression used for?,Predicting a continuous output variable.
+What is multilayer perceptron?,A neural network with one or more hidden layers.
+What is a perceptron?,A simple linear binary classifier.
+What is the role of activation functions?,To introduce non-linearity in neural networks.
+What is the backpropagation algorithm?,A method to update weights in neural networks by minimizing error.
+What is K-means clustering?,A method to partition data into K clusters based on similarity.
+What is the difference between K-means and K-modes?,"K-means is for numerical data, K-modes is for categorical data."
+What is model evaluation?,Assessing how well a trained model performs on new data.
+What is bias in a model?,Error due to overly simplistic assumptions.
+What is variance in a model?,Error due to sensitivity to small data fluctuations.
+What is a test set?,A dataset used to evaluate model generalization.
+What is a training set?,A dataset used to train the model.
+What is the role of validation set?,Used to tune hyperparameters and avoid overfitting.
+What is hyperparameter tuning?,Optimizing settings that govern the training process.
+What is cross-validation?,A technique to evaluate models by partitioning data into folds.
+What is a confusion matrix?,A table showing true vs predicted labels.
+What is accuracy?,The proportion of correct predictions.
+What is precision?,The proportion of true positives among predicted positives.
+What is recall?,The proportion of true positives among actual positives.
+What is F1 score?,The harmonic mean of precision and recall.
+What is the curse of dimensionality?,Issues that arise when working with high-dimensional data.
+What is dimensionality reduction?,Reducing the number of features while preserving information.
+What is PCA?,A technique to reduce dimensionality by projecting data to principal components.
+What is LDA?,A supervised dimensionality reduction technique maximizing class separation.
+What is one-hot encoding?,Representing categorical variables as binary vectors.
+What is feature scaling?,Normalizing features to a standard range.
+What is normalization?,Rescaling data to have unit norm.
+What is standardization?,Rescaling data to have zero mean and unit variance.
+What is an epoch in training?,One complete pass through the training dataset.
+What is batch size?,The number of samples processed before updating the model.
+What is gradient descent?,An optimization algorithm to minimize a loss function.
+What is learning rate?,A hyperparameter that controls the size of weight updates.
+What is underfitting?,When the model cannot capture underlying patterns in the data.
+What is model interpretability?,How easily a human can understand the model's decisions.
+What is explainable AI?,Techniques to make AI model decisions understandable.
+What is model deployment?,Integrating a trained model into production.
+What is concept drift?,Changes in data distribution over time.
+What is ensemble learning?,Combining multiple models to improve performance.
+What is data leakage?,Using information in training that won’t be available in production.
+What is regularization?,A technique to prevent overfitting by penalizing model complexity.
+What is L1 regularization?,Also called Lasso; adds absolute value of coefficients as penalty.
