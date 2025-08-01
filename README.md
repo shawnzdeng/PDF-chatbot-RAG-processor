@@ -60,7 +60,7 @@ python main.py prepare-collections --show-details
 python main.py score --max-combinations 9 --show-details
 
 # Step 3: Analyze results and generate production config
-python main.py analyze --max-combinations 9 --show-details
+python main.py analyze --show-details
 ```
 
 ### Option 2: Complete Pipeline
