@@ -5,6 +5,7 @@ Parses PDF files and uploads embeddings to Qdrant vector database
 
 import os
 import uuid
+import time
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from tqdm import tqdm
@@ -44,15 +45,31 @@ class QdrantProcessor:
         self.embedding_model = embedding_model or Config.DEFAULT_EMBEDDING_MODEL
         self.collection_name = collection_name or Config.DEFAULT_COLLECTION_NAME
         
-        # Initialize clients
-        self.embeddings = OpenAIEmbeddings(
-            model=self.embedding_model,
-            openai_api_key=Config.OPENAI_API_KEY
-        )
+        # Initialize OpenAI embeddings with proper error handling
+        try:
+            self.embeddings = OpenAIEmbeddings(
+                model=self.embedding_model,
+                api_key=Config.OPENAI_API_KEY
+            )
+        except Exception as e:
+            logger.warning(f"Failed with api_key parameter: {e}")
+            # Try alternative initialization method
+            try:
+                self.embeddings = OpenAIEmbeddings(
+                    openai_api_key=Config.OPENAI_API_KEY,
+                    model=self.embedding_model
+                )
+            except Exception as e2:
+                logger.error(f"Both initialization methods failed: {e2}")
+                # Use basic initialization without explicit parameters
+                import os
+                os.environ['OPENAI_API_KEY'] = Config.OPENAI_API_KEY
+                self.embeddings = OpenAIEmbeddings(model=self.embedding_model)
         
         self.qdrant_client = QdrantClient(
             url=Config.QDRANT_URL,
-            api_key=Config.QDRANT_API_KEY
+            api_key=Config.QDRANT_API_KEY,
+            timeout=60  # Increase timeout to 60 seconds
         )
         
         self.text_splitter = RecursiveCharacterTextSplitter(
@@ -162,6 +179,35 @@ class QdrantProcessor:
             logger.error(f"Error generating embeddings: {e}")
             raise
     
+    def _upload_batch_with_retry(self, batch: List[PointStruct], max_retries: int = 3) -> bool:
+        """
+        Upload a batch of points with retry logic
+        
+        Args:
+            batch: List of PointStruct objects to upload
+            max_retries: Maximum number of retry attempts
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        for attempt in range(max_retries):
+            try:
+                self.qdrant_client.upsert(
+                    collection_name=self.collection_name,
+                    points=batch
+                )
+                return True
+            except Exception as e:
+                wait_time = (2 ** attempt) * 1  # Exponential backoff: 1, 2, 4 seconds
+                logger.warning(f"Upload attempt {attempt + 1} failed: {e}")
+                if attempt < max_retries - 1:
+                    logger.info(f"Retrying in {wait_time} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    logger.error(f"All {max_retries} upload attempts failed")
+                    return False
+        return False
+
     def upload_to_qdrant(self, documents: List[Dict[str, Any]]) -> bool:
         """
         Upload documents with embeddings to Qdrant
@@ -185,7 +231,7 @@ class QdrantProcessor:
             
             # Get vector size and create collection
             vector_size = len(embeddings[0]) if embeddings else 1536
-            self.create_collection(vector_size)
+            self.create_collection(vector_size=vector_size)
             
             # Prepare points for upload
             points = []
@@ -200,17 +246,22 @@ class QdrantProcessor:
                 )
                 points.append(point)
             
-            # Upload to Qdrant in batches
-            batch_size = 100
+            # Upload to Qdrant in smaller batches with retry logic
+            batch_size = 10  # Reduced batch size for better reliability
             total_batches = (len(points) + batch_size - 1) // batch_size
+            failed_batches = 0
             
             for i in tqdm(range(0, len(points), batch_size), 
                          desc="Uploading to Qdrant", total=total_batches):
                 batch = points[i:i + batch_size]
-                self.qdrant_client.upsert(
-                    collection_name=self.collection_name,
-                    points=batch
-                )
+                success = self._upload_batch_with_retry(batch)
+                if not success:
+                    failed_batches += 1
+                    logger.error(f"Failed to upload batch {i//batch_size + 1}")
+            
+            if failed_batches > 0:
+                logger.warning(f"Upload completed with {failed_batches} failed batches out of {total_batches}")
+                return failed_batches == 0  # Return False if any batches failed
             
             logger.info(f"Successfully uploaded {len(points)} points to Qdrant")
             return True
@@ -265,20 +316,32 @@ class QdrantProcessor:
 
 def main():
     """Main function for testing"""
-    processor = QdrantProcessor()
+    # Get first PDF file in data folder
+    pdf_files = list(Config.DATA_DIR.glob("*.pdf"))
     
-    # Process the PDF in data folder
-    pdf_path = Config.DATA_DIR / "random_machine_learing_pdf.pdf"
+    if not pdf_files:
+        print(f"❌ No PDF files found in {Config.DATA_DIR}")
+        print("Please add a PDF file to the data folder and try again")
+        return
     
-    if pdf_path.exists():
-        success = processor.process_pdf_to_qdrant(str(pdf_path))
-        if success:
-            print(f"✅ Successfully processed {pdf_path}")
-            print(f"Collection info: {processor.get_collection_info()}")
-        else:
-            print(f"❌ Failed to process {pdf_path}")
+    pdf_path = pdf_files[0]
+    print(f"📄 Processing PDF: {pdf_path.name}")
+    
+    processor = QdrantProcessor(
+        chunk_size=1000,
+        chunk_overlap=100,
+        embedding_model="text-embedding-3-large",
+        collection_name="pdf_documents_test"
+    )
+    
+    success = processor.process_pdf_to_qdrant(str(pdf_path))
+    
+    if success:
+        print(f"✅ Successfully processed {pdf_path.name}")
+        collection_info = processor.get_collection_info()
+        print(f"📊 Collection info: {collection_info}")
     else:
-        print(f"❌ PDF file not found: {pdf_path}")
+        print(f"❌ Failed to process {pdf_path.name}")
 
 
 if __name__ == "__main__":
