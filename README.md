@@ -47,6 +47,7 @@ Update the `input` section based on the file you uploaded.
   }
 ```
 You may also update the parameter tunning and other section as needed.
+**Caution**: The current parameter tuning uses grid search, which can be time-consuming if there are many combinations.
 
 ## 🏃‍♂️ How to Run
 
@@ -85,6 +86,16 @@ After optimization, you'll get:
 1. **`production_rag_config.json`** - Ready-to-use configuration:
 ```json
 {
+  "document_metadata": {
+    "file_description": "The file is a set of lecture notes titled Machine Learning from Malla Reddy College of Engineering & Technology, designed for a final-year B.Tech course. It provides a comprehensive overview of machine learning fundamentals, including supervised, unsupervised, and reinforcement learning; common models like decision trees, neural networks, and support vector machines; ensemble methods; probabilistic models; and genetic algorithms. The material emphasizes both theoretical foundations (e.g., PAC learning, VC dimension) and practical applications.",
+    "example_questions": [
+      "What is the difference between supervised and unsupervised learning?",
+      "Can you explain how decision trees work?",
+      "What are the key components of a neural network?",
+      "How does reinforcement learning differ from other types of machine learning?",
+      "What is the purpose of ensemble methods in machine learning?"
+    ]
+  },
   "rag_system_config": {
     "chunk_size": 500,
     "chunk_overlap": 100,
@@ -94,14 +105,53 @@ After optimization, you'll get:
     "top_k_retrieval": 5
   },
   "qdrant_config": {
-    "collection_name": "optimized_collection_name",
-    "url": "your-qdrant-cloud-url",
+    "collection_name": "rag_random_ml_pdf__chunk500_overlap100_emb3large",
+    "url": "https://8ee07211-20b2-45b8-9f60-62bcc1d44940.us-west-1-0.aws.cloud.qdrant.io:6333",
     "vector_size": 3072
   },
   "performance_metrics": {
-    "composite_score": 0.847,
-    "faithfulness": 0.893,
-    "answer_relevancy": 0.876
+    "faithfulness": 0.7368487394957983,
+    "answer_relevancy": 0.7041266943998291,
+    "context_precision": 0.8899999999109999,
+    "context_recall": 0.5791666666666666,
+    "composite_score": 0.7275355251183234
+  },
+  "optimization_info": {
+    "tuning_date": "2025-07-31T21:42:06.822339",
+    "total_combinations_tested": 3,
+    "optimization_metric": "composite_score",
+    "optimization_framework": "MLflow + RAGAs",
+    "ready_for_production": true
+  },
+  "reranker_config": {
+    "enabled": true,
+    "embedding_weight": 0.3,
+    "cross_encoder_weight": 0.7,
+    "top_k_before_rerank": 10.0,
+    "hybrid_scoring": true,
+    "model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "score_threshold": 0.3
+  },
+  "usage_instructions": {
+    "description": "Optimized RAG parameters from MLflow tuning with RAGAs evaluation",
+    "integration_notes": [
+      "Use these exact parameters for optimal performance",
+      "Collection contains pre-processed document embeddings",
+      "Metrics show performance on evaluation benchmark",
+      "Reranker configuration optimized for document relevance",
+      "Ready for production deployment"
+    ],
+    "required_environment_variables": [
+      "OPENAI_API_KEY",
+      "QDRANT_API_KEY"
+    ],
+    "deployment_checklist": [
+      "Verify collection exists in Qdrant",
+      "Confirm environment variables are set",
+      "Install reranker dependencies if reranking is enabled",
+      "Test with sample queries",
+      "Monitor performance metrics"
+    ]
   }
 }
 ```
